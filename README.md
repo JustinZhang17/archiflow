@@ -1,1 +1,1 @@
-# archiflow
+# An open source isometric architectural diagramming tool.
