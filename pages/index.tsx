@@ -4,13 +4,13 @@ import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
 
 // Internal Imports
-import Camera from "@/components/organisms/three/camera";
-import Ground from "@/components/organisms/three/ground";
-import Lighting from "@/components/organisms/three/lighting";
-import Draggable from "@/components/molecules/draggable";
-import Sidebar from "@/components/organisms/sidebar";
-import BottomBar from "@/components/organisms/bottombar";
-import TopBar from "@/components/organisms/topbar";
+import Camera from "@/components/organisms/three/Camera";
+import Ground from "@/components/organisms/three/Ground";
+import Lighting from "@/components/organisms/three/Lighting";
+import Draggable from "@/components/molecules/Draggable";
+import Sidebar from "@/components/organisms/Sidebar";
+import BottomBar from "@/components/organisms/Bottombar";
+import TopBar from "@/components/organisms/Topbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
