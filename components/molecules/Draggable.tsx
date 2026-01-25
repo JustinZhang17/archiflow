@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { DragControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Import useFrame for animation loop
 
 import * as THREE from "three";
 
-const ANIMATION_SPEED = 0.2;
+const ANIMATION_SPEED = 0.3;
+const SNAP_INTERVAL = 0.5;
 
 type DraggableProps = {
   children: React.ReactNode;
@@ -15,37 +16,50 @@ const Draggable = ({ children }: DraggableProps) => {
   const targetPosition = useRef(new THREE.Vector3()); // Stores the snapped target position
   const isDragging = useRef(false); // To track if dragging is active
 
-  const handleDragStart = () => {
+  const tempVector = useRef(new THREE.Vector3());
+  const tempQuaternion = useRef(new THREE.Quaternion());
+  const tempScale = useRef(new THREE.Vector3(1, 1, 1));
+
+  const handleDragStart = useCallback(() => {
     isDragging.current = true;
     if (!groupRef.current) return;
     targetPosition.current.copy(groupRef.current.position);
-  };
+  }, []);
 
-  const handleDragEnd = () => {
+  const handleDragEnd = useCallback(() => {
     isDragging.current = false;
     if (!groupRef.current) return;
     groupRef.current.position.copy(targetPosition.current);
-  };
 
-  const handleDrag = (localMatrix: THREE.Matrix4) => {
+    // Ensure the matrix is updated to match the new position (preventing snapping offset issues)
+    groupRef.current.matrix.compose(
+      groupRef.current.position,
+      groupRef.current.quaternion,
+      groupRef.current.scale
+    );
+  }, []);
+
+
+  const handleDrag = useCallback((localMatrix: THREE.Matrix4) => {
     const obj = groupRef.current;
     if (!obj) return;
 
     // Decompose the incoming localMatrix to get the dragged position
-    const currentDragPosition = new THREE.Vector3();
     localMatrix.decompose(
-      currentDragPosition,
-      new THREE.Quaternion(),
-      new THREE.Vector3()
+      tempVector.current,
+      tempQuaternion.current,
+      tempScale.current
     );
 
     // Snap X and Z of the *dragged* position to nearest 0.5
-    const snappedX = Math.round(currentDragPosition.x * 2) / 2;
-    const snappedZ = Math.round(currentDragPosition.z * 2) / 2;
+    const snappedX = Math.round(tempVector.current.x / SNAP_INTERVAL) * SNAP_INTERVAL;
+    const snappedZ = Math.round(tempVector.current.z / SNAP_INTERVAL) * SNAP_INTERVAL;
 
     // Update the targetPosition
-    targetPosition.current.set(snappedX, obj.position.y, snappedZ); // Maintain current Y
-  };
+    if (snappedX !== targetPosition.current.x || snappedZ !== targetPosition.current.z) {
+      targetPosition.current.set(snappedX, obj.position.y, snappedZ); // Maintain current Y
+    }
+  }, []);
 
   useFrame(() => {
     const obj = groupRef.current;

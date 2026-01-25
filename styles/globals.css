@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+/* HACK: see if there is another way to hide cursor */
+html {
+  cursor: none !important;
+}

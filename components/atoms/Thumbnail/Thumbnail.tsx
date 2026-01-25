@@ -1,13 +1,14 @@
+// External Import 
+import { ComponentPropsWithoutRef } from "react";
 
-interface ThumbnailProps {
+type ThumbnailProps = ComponentPropsWithoutRef<'div'> & {
   url: string;
-  [key: string]: any; // HACK: Check if this is good practice for passing additional props
 }
 
 const Thumbnail = ({ url, ...props }: ThumbnailProps) => {
   return (
-    <div className="avatar {...props}">
-      <div className="w-24 rounded">
+    <div className="avatar pointer-events-none select-none" {...props}>
+      <div className="w-18 rounded">
         <img src={url} />
       </div>
     </div>
