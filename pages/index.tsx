@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { useState } from "react";
 
 // Internal Imports
+import Ghost from "@/components/atoms/Ghost/Ghost";
 import Cursor from "@/components/atoms/Cursor/Cursor";
 import Camera from "@/components/organisms/three/Camera";
 import Ground from "@/components/organisms/three/Ground";
@@ -33,12 +34,17 @@ const CAM_HEIGHT = 100; // Height of the camera in top-down view
 const Home = () => {
   const [view, setView] = useState<"top-down" | "isometric">("top-down");
   const [cursorStatus, setCursorStatus] = useState<"default" | "hovered">("default");
+  const [draggedObject, setDraggedObject] = useState<ObjectProps | null>(null);
 
   // HACK: Current Easy State Management
   const [spawnedObjects, setSpawnedObjects] = useState<ObjectProps[]>([]);
 
-  const addObject = (obj: ObjectProps) => {
-    setSpawnedObjects((prev) => [...prev, obj]);
+  // Function to add a new object to the canvas
+  const handleCursorUp = () => {
+    if (draggedObject) {
+      setSpawnedObjects((prev) => [...prev, draggedObject]);
+      setDraggedObject(null);
+    }
   }
 
   const toggleView = () => {
@@ -48,6 +54,8 @@ const Home = () => {
   return (
     <div
       className={`${geistSans.className} ${geistMono.className} h-screen flex`}
+      // TODO: Check if there is a better onMouseUp attribute that is device agnostic 
+      onMouseUp={handleCursorUp}
     >
       <button
         className="absolute top-4 right-4 bg-black text-white p-2 text-xs rounded z-50"
@@ -57,7 +65,7 @@ const Home = () => {
       </button>
 
       {/* TODO: Convert this to one component, so the tabs can be moved around*/}
-      <Sidebar addObject={addObject} />
+      <Sidebar setDraggedObject={setDraggedObject} />
       <BottomBar />
       <TopBar />
 
@@ -65,6 +73,10 @@ const Home = () => {
         <Camera view={view} planeY={PLANE} height={CAM_HEIGHT} />
 
         <Ground planeY={PLANE} />
+
+        {draggedObject && (
+          <Ghost obj={draggedObject} setObj={setDraggedObject} planeY={PLANE} />
+        )}
 
         {spawnedObjects.map((obj: ObjectProps, index: number) => {
           const ModelComponent = ModelRegistry[obj.name];

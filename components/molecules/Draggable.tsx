@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber"; // Import useFrame for animation 
 
 import * as THREE from "three";
 
+// TODO: Have a constants and Enums file for these values
 const ANIMATION_SPEED = 0.3;
 const SNAP_INTERVAL = 0.5;
 
@@ -24,6 +25,9 @@ const Draggable = ({ children }: DraggableProps) => {
     isDragging.current = true;
     if (!groupRef.current) return;
     targetPosition.current.copy(groupRef.current.position);
+
+    // TODO: Use this to update the state of the object in state management library
+    console.log("Drag started:", groupRef.current.position);
   }, []);
 
   const handleDragEnd = useCallback(() => {
@@ -37,11 +41,15 @@ const Draggable = ({ children }: DraggableProps) => {
       groupRef.current.quaternion,
       groupRef.current.scale
     );
+
+    // TODO: Use this to update the state of the object in state management library
+    console.log("Drag ended:", groupRef.current.position);
   }, []);
 
 
   const handleDrag = useCallback((localMatrix: THREE.Matrix4) => {
     const obj = groupRef.current;
+    const tar = targetPosition.current;
     if (!obj) return;
 
     // Decompose the incoming localMatrix to get the dragged position
@@ -56,8 +64,8 @@ const Draggable = ({ children }: DraggableProps) => {
     const snappedZ = Math.round(tempVector.current.z / SNAP_INTERVAL) * SNAP_INTERVAL;
 
     // Update the targetPosition
-    if (snappedX !== targetPosition.current.x || snappedZ !== targetPosition.current.z) {
-      targetPosition.current.set(snappedX, obj.position.y, snappedZ); // Maintain current Y
+    if (snappedX !== tar.x || snappedZ !== tar.z) {
+      tar.set(snappedX, obj.position.y, snappedZ); // Maintain current Y
     }
   }, []);
 

@@ -4,7 +4,7 @@ import { IconCard } from "@/components/molecules/IconCard/IconCard";
 import { ObjectProps } from "@/types/object";
 
 type SidebarProps = {
-  addObject: (obj: ObjectProps) => void;
+  setDraggedObject: (obj: ObjectProps) => void;
 }
 
 const OBJECTS: ObjectProps[] = [
@@ -17,11 +17,11 @@ const OBJECTS: ObjectProps[] = [
   }
 ]
 
-const Sidebar = ({ addObject }: SidebarProps) => {
+const Sidebar = ({ setDraggedObject }: SidebarProps) => {
   return (
     <div className="p-2 border-r border-white">
       {OBJECTS.map((obj: ObjectProps) => (
-        <IconCard key={obj.id} name={obj.name} tags={[]} url="https://placehold.co/300x300/png" onMouseDown={() => addObject(obj)} />
+        <IconCard key={obj.id} name={obj.name} tags={[]} url="https://placehold.co/300x300/png" onMouseDown={() => setDraggedObject(obj)} />
       ))}
     </div>
   );
