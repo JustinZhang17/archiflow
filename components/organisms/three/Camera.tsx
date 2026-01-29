@@ -3,8 +3,11 @@ import { useEffect, useRef } from "react";
 import { CameraControls, OrthographicCamera } from "@react-three/drei";
 import * as THREE from "three";
 
+// Internal Imports
+import { CanvasView } from "@/types/enums";
+
 type CameraProps = {
-  view: "top-down" | "isometric";
+  view: CanvasView;
   planeY: number;
   height: number;
 };
@@ -41,7 +44,7 @@ const Camera = ({ view, planeY, height }: CameraProps) => {
     if (!cameraControlsRef.current) return;
     const controls = cameraControlsRef.current;
 
-    if (view === "top-down") {
+    if (view === CanvasView.TopDown) {
       const ang = 0; // 0 degrees for top-down view
       const x = intersectPoint.x;
       const z = intersectPoint.z;
@@ -57,7 +60,7 @@ const Camera = ({ view, planeY, height }: CameraProps) => {
       controls.maxAzimuthAngle = ang;
       controls.minPolarAngle = ang;
       controls.maxPolarAngle = ang;
-    } else if (view === "isometric") {
+    } else if (view === CanvasView.Isometric) {
       const ang = Math.PI / 4; // 45 degrees for isometric view
       const sin = Math.sin(ang);
       const cos = Math.cos(ang);
@@ -88,6 +91,7 @@ const Camera = ({ view, planeY, height }: CameraProps) => {
         makeDefault
         position={[0, planeY + height, 0]}
         zoom={100}
+
       />
       <CameraControls
         makeDefault

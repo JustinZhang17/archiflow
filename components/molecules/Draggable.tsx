@@ -1,12 +1,11 @@
+// External Imports
 import React, { useRef, useCallback } from "react";
 import { DragControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber"; // Import useFrame for animation loop
-
 import * as THREE from "three";
 
-// TODO: Have a constants and Enums file for these values
-const ANIMATION_SPEED = 0.3;
-const SNAP_INTERVAL = 0.5;
+// Internal Imports 
+import { CANVAS } from "@/constants/canvas";
 
 type DraggableProps = {
   children: React.ReactNode;
@@ -60,8 +59,8 @@ const Draggable = ({ children }: DraggableProps) => {
     );
 
     // Snap X and Z of the *dragged* position to nearest 0.5
-    const snappedX = Math.round(tempVector.current.x / SNAP_INTERVAL) * SNAP_INTERVAL;
-    const snappedZ = Math.round(tempVector.current.z / SNAP_INTERVAL) * SNAP_INTERVAL;
+    const snappedX = Math.round(tempVector.current.x / CANVAS.SNAP_INTERVAL) * CANVAS.SNAP_INTERVAL;
+    const snappedZ = Math.round(tempVector.current.z / CANVAS.SNAP_INTERVAL) * CANVAS.SNAP_INTERVAL;
 
     // Update the targetPosition
     if (snappedX !== tar.x || snappedZ !== tar.z) {
@@ -74,7 +73,7 @@ const Draggable = ({ children }: DraggableProps) => {
     if (!obj) return;
     if (!isDragging.current) return;
 
-    obj.position.lerp(targetPosition.current, ANIMATION_SPEED);
+    obj.position.lerp(targetPosition.current, CANVAS.ANIMATION_SPEED);
 
     // Rebuild matrices to ensure consistency if the object's position has changed
     obj.matrix.compose(obj.position, obj.quaternion, obj.scale);

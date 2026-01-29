@@ -6,6 +6,7 @@ import * as THREE from "three";
 // Internal Imports
 import { ModelRegistry } from "@/helpers/modelRegistry";
 import { ObjectProps } from "@/types/object";
+import { CANVAS } from "@/constants/canvas";
 
 type GhostProps = {
   obj: ObjectProps;
@@ -13,14 +14,10 @@ type GhostProps = {
   planeY: number;
 }
 
-// TODO: Have a constants and Enums file for these values
-const ANIMATION_SPEED = 0.3;
-const SNAP_INTERVAL = 0.5;
-
 const Ghost = ({ obj, setObj, planeY }: GhostProps) => {
   const groupRef = useRef<THREE.Group | null>(null);
   const targetPosition = useRef(new THREE.Vector3()); // Stores the snapped target position
-  const ModelComponent = ModelRegistry[obj.name];
+  const ModelComponent = ModelRegistry[obj.fileName];
 
   const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), planeY)
 
@@ -32,14 +29,14 @@ const Ghost = ({ obj, setObj, planeY }: GhostProps) => {
     raycaster.setFromCamera(pointer, camera)
     raycaster.ray.intersectPlane(plane, tar)
 
-    const snappedX = Math.round(tar.x / SNAP_INTERVAL) * SNAP_INTERVAL;
-    const snappedZ = Math.round(tar.z / SNAP_INTERVAL) * SNAP_INTERVAL;
+    const snappedX = Math.round(tar.x / CANVAS.SNAP_INTERVAL) * CANVAS.SNAP_INTERVAL;
+    const snappedZ = Math.round(tar.z / CANVAS.SNAP_INTERVAL) * CANVAS.SNAP_INTERVAL;
 
     // Update the targetPosition
     if (snappedX === tar.x && snappedZ === tar.z) return;
     tar.set(snappedX, obj.position.y, snappedZ); // Maintain current Y
 
-    obj.position.lerp(tar, ANIMATION_SPEED);
+    obj.position.lerp(tar, CANVAS.ANIMATION_SPEED);
 
     // Rebuild matrices to ensure consistency if the object's position has changed
     obj.matrix.compose(obj.position, obj.quaternion, obj.scale);

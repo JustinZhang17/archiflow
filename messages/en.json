@@ -1,0 +1,17 @@
+{
+  "settings": "Settings",
+  "canvasView": {
+    "isometric": "Toggle Isometric View",
+    "topDown": "Toggle Top-Down View"
+  },
+  "language": {
+    "en": "English",
+    "fr": "French"
+  },
+  "models": {
+    "bowl": {
+      "name": "Bowl",
+      "description": "A round, deep dish used for holding food or liquids."
+    }
+  }
+}

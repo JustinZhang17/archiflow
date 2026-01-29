@@ -1,18 +1,21 @@
-import { useState, useEffect } from 'react'
+// External Imports
+import { useState, useEffect } from 'react';
+
+// Internal Imports
+import { CursorStatus } from '@/types/enums';
 
 type CursorProps = {
-  // HACK: Change to enum
-  cursorStatus: 'default' | 'hovered'
+  cursorStatus: CursorStatus
 }
 
 const Cursor = ({ cursorStatus }: CursorProps) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
   // Define styles for different cursor states
-  // HACK: set type for cursorStyles using cursorStatus enum
-  const cursorStyles = {
+  const cursorStyles: Record<CursorStatus, string> = {
     default: 'w-5 h-5',
-    hovered: 'w-8 h-8'
+    hovered: 'w-8 h-8',
+    hidden: 'hidden',
   }
 
   useEffect(() => {
@@ -26,7 +29,7 @@ const Cursor = ({ cursorStatus }: CursorProps) => {
   return (
     <div
       className={`
-        fixed top-0 left-0 rounded-full pointer-events-none z-[999] border-2 border-white 
+        fixed top-0 left-0 rounded-full pointer-events-none z-[999] border-2 
         ${cursorStyles[cursorStatus] || cursorStyles.default}
       `}
       style={{

@@ -1,6 +1,7 @@
 type ObjectProps = {
   id: string; // Unique identifier for the Object 
   name: string; // Type of the Object 
+  fileName: string; // 3D Model file name
   position: { x: number, z: number }; // Position of the Object in 3D space
   rotation: { y: number }; // Rotation of the Object in 3D space 
   scale: [number, number, number]; // Scale of the Object in 3D space

@@ -1,0 +1,17 @@
+{
+  "settings": "Paramètres",
+  "canvasView": {
+    "isometric": "Vue isométrique",
+    "topDown": "Vue Descendante"
+  },
+  "language": {
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "models": {
+    "bowl": {
+      "name": "Bol",
+      "description": "Un plat rond et profond utilisé pour contenir des aliments ou des liquides."
+    }
+  }
+}
