@@ -29,13 +29,11 @@ const Home = () => {
   const t = useTranslations();
   const profileId = useProfile();
 
-  // TODO: Add dragged object state into profiles in canvas store (zustand)
-  const [draggedObject, setDraggedObject] = useState<ObjectProps | null>(null);
-
   // Debugging: Log the entire canvas store state on any change
-  // useEffect(() => {
-  //   console.log("Canvas Store State:", useCanvasStore.getState())
-  // }, [useCanvasStore((state) => state)]);
+  useEffect(() => {
+    console.log("Canvas Store Profile Theme:", useCanvasStore.getState().profiles[profileId]?.theme);
+    console.log("Canvas Store Profile Camera:", useCanvasStore.getState().profiles[profileId]?.camera);
+  }, [useCanvasStore((state) => state.profiles[profileId])]);
 
   // States
   const profiles = useCanvasStore((state) => state.profiles);
@@ -45,11 +43,14 @@ const Home = () => {
   const setCursorStatus = useCanvasStore.getState().setCursorStatus;
   const addObject = useCanvasStore.getState().addObject;
 
+  // NOTE: Multipurpose Update: Using local state for draggedObject
+  const updateProfile = useCanvasStore.getState().updateProfile;
+
   // Function to add a new object to the canvas
   const handleCursorUp = () => {
-    if (draggedObject) {
-      addObject(draggedObject);
-      setDraggedObject(null);
+    if (profiles[profileId].draggedObject) {
+      addObject(profiles[profileId].draggedObject);
+      updateProfile(profileId, { draggedObject: null });
     }
   }
 
@@ -61,7 +62,7 @@ const Home = () => {
 
   const openSettingsModal = () => {
     const modal = document.getElementById("settings-modal");
-    if (modal instanceof HTMLDialogElement) modal.showModal();
+    if (modal instanceof HTMLDialogElement) modal.show();
 
     setCursorStatus(profileId, CursorStatus.Hidden);
   }
@@ -74,7 +75,6 @@ const Home = () => {
       onPointerUp={handleCursorUp}
     >
       <input type="checkbox" value={GlobalTheme.Light} className="absolute bottom-16 left-4 toggle theme-controller" />
-      <LanguagePicker />
       <button
         className="absolute top-4 right-4 z-50 btn btn-sm"
         onClick={toggleView}
@@ -90,18 +90,14 @@ const Home = () => {
       <SettingsModal />
 
       {/* TODO: Convert this to one component, so the tabs can be moved around*/}
-      <Sidebar setDraggedObject={setDraggedObject} />
+      <Sidebar />
       <BottomBar />
       <TopBar />
 
       <Canvas dpr={[1, 2]} shadows className="h-screen">
         <Camera />
-
         <Ground />
-
-        {draggedObject && (
-          <Ghost obj={draggedObject} setObj={setDraggedObject} planeY={CANVAS.PLANE} />
-        )}
+        <Ghost />
 
         {Object.values(objects).map((obj: ObjectProps, index: number) => {
           const ModelComponent = ModelRegistry[obj.fileName];

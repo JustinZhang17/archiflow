@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent } from 'react';
 
-const LanguagePicker = () => {
+const LanguagePicker = ({ ...props }) => {
   const router = useRouter();
   const t = useTranslations('language');
   const { locales, locale: currentLocale, pathname, asPath, query } = router;
@@ -17,7 +17,7 @@ const LanguagePicker = () => {
     <select
       value={currentLocale}
       onChange={handleChange}
-      className="select select-sm absolute bottom-4 left-4 z-50"
+      {...props}
     >
       {locales?.map((loc) => (
         <option key={loc} value={loc}>

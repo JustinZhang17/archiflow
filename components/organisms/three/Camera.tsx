@@ -91,7 +91,6 @@ const Camera = () => {
         makeDefault
         position={[0, CANVAS.PLANE + CANVAS.CAM_HEIGHT, 0]}
         zoom={100}
-
       />
       <CameraControls
         makeDefault

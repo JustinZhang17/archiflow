@@ -5,14 +5,14 @@ import { useTranslations } from "next-intl";
 import { IconCard } from "@/components/molecules/IconCard/IconCard";
 import { ObjectProps } from "@/types/object";
 import { generateUUID } from "@/helpers/generators";
+import { useProfile } from "@/hooks/useProfile";
+import { useCanvasStore } from "@/stores/canvas/canvasStore";
 
-type SidebarProps = {
-  setDraggedObject: (obj: ObjectProps) => void;
-}
-
-
-const Sidebar = ({ setDraggedObject }: SidebarProps) => {
+const Sidebar = () => {
   const t = useTranslations('models');
+
+  const profileId = useProfile();
+  const setDraggedObject = useCanvasStore.getState().updateProfile;
 
   const MODELS: ObjectProps[] = [
     {
@@ -31,12 +31,13 @@ const Sidebar = ({ setDraggedObject }: SidebarProps) => {
       {MODELS.map((obj: ObjectProps) => (
         <IconCard key={obj.id} name={obj.name} tags={[]} url="https://placehold.co/300x300/png"
           onPointerDown={() => {
-            const newObj = { ...obj, instanceId: generateUUID() };
+            const newObj: ObjectProps = { ...obj, instanceId: generateUUID() };
             if (!newObj.instanceId) {
               console.error(`Failed to generate instanceId for the ${newObj.name}`);
               return;
             }
-            setDraggedObject(newObj);
+
+            setDraggedObject(profileId, { draggedObject: newObj });
           }}
         />
       ))}

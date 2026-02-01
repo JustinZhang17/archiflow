@@ -5,21 +5,24 @@ import * as THREE from "three";
 
 // Internal Imports
 import { ModelRegistry } from "@/helpers/modelRegistry";
-import { ObjectProps } from "@/types/object";
 import { CANVAS } from "@/constants/canvas";
+import { useProfile } from "@/hooks/useProfile";
+import { useCanvasStore } from "@/stores/canvas/canvasStore";
 
-type GhostProps = {
-  obj: ObjectProps;
-  setObj: (obj: ObjectProps) => void;
-  planeY: number;
-}
+const Ghost = () => {
+  const profileId = useProfile();
 
-const Ghost = ({ obj, setObj, planeY }: GhostProps) => {
+  const draggedObject = useCanvasStore((state) => state.profiles[profileId]?.draggedObject);
+  const setDraggedObject = useCanvasStore.getState().updateProfile;
+
   const groupRef = useRef<THREE.Group | null>(null);
   const targetPosition = useRef(new THREE.Vector3()); // Stores the snapped target position
-  const ModelComponent = ModelRegistry[obj.fileName];
 
-  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), planeY)
+  const ModelComponent = draggedObject ? ModelRegistry[draggedObject.fileName] : null;
+
+  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), CANVAS.PLANE);
+
+  // const 
 
   useFrame(({ pointer, camera, raycaster }) => {
     const obj = groupRef.current;
@@ -42,15 +45,15 @@ const Ghost = ({ obj, setObj, planeY }: GhostProps) => {
     obj.matrix.compose(obj.position, obj.quaternion, obj.scale);
   });
 
+  if (!draggedObject || !ModelComponent) return null;
 
   return (
     <ModelComponent
       ref={groupRef}
-      // TODO: When I end up using a statement management library, move this logic, so I can just call a func to update the object's position
-      onPointerUp={() => setObj({ ...obj, position: { x: targetPosition.current.x, z: targetPosition.current.z } })}
-      position={[obj.position.x, planeY, obj.position.z]}
-      rotation={[0, (obj.rotation.y * Math.PI) / 180, 0]}
-      scale={obj.scale}
+      onPointerMove={() => setDraggedObject(profileId, { draggedObject: { ...draggedObject, position: { x: targetPosition.current.x, z: targetPosition.current.z } } })}
+      position={[draggedObject.position.x, CANVAS.PLANE, draggedObject.position.z]}
+      rotation={[0, (draggedObject.rotation.y * Math.PI) / 180, 0]}
+      scale={draggedObject.scale}
     />
   )
 }

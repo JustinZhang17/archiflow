@@ -6,6 +6,7 @@ import { useCanvasStore } from "@/stores/canvas/canvasStore";
 import { ProfileProps } from "@/types/profile";
 import { CanvasView, CursorStatus, GlobalTheme } from "@/types/enums";
 import { generateUUID } from "@/helpers/generators";
+import { CANVAS } from "@/constants/canvas";
 
 // TODO: Figure out if I should move this into the constants folder
 const PROFILE_STORAGE_KEY = "user-profile-id";
@@ -33,10 +34,12 @@ const useProfile = (): ProfileProps["id"] => {
         color: "#ff6600",
         // TODO: Change camera defaults later to match the selected view
         camera: {
-          position: [0, 0, 0],
-          zoom: 1,
+          position: [0, CANVAS.PLANE + CANVAS.CAM_HEIGHT, 0],
+          zoom: 100,
           rotation: [0, 0, 0],
         },
+        draggedObject: null,
+        focusedObject: null,
         view: CanvasView.TopDown,
         theme: GlobalTheme.Light,
         cursor: {
