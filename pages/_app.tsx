@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 // Internal Imports
 import "@/styles/globals.css";
+import { Loading } from "@/components/organisms/LoadingScreen";
 
 const satoshi = localFont({
   src: [
@@ -39,6 +40,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       messages={pageProps.messages}
     >
       <main className={`${satoshi.variable} ${erode.variable} font-sans`}>
+        <Loading />
         <Component {...pageProps} />
       </main>
     </NextIntlClientProvider>

@@ -1,5 +1,6 @@
 type ObjectProps = {
-  id: string; // Unique identifier for the Object 
+  id: string; // Unique identifier for the Object type 
+  instanceId: string; // Unique identifier for each instance of the Object
   name: string; // Type of the Object 
   fileName: string; // 3D Model file name
   position: { x: number, z: number }; // Position of the Object in 3D space

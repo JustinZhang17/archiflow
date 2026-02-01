@@ -1,6 +1,6 @@
 // External Imports
 import { Canvas } from "@react-three/fiber";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from 'next-intl';
 
@@ -22,56 +22,55 @@ import { CanvasView, CursorStatus, GlobalTheme } from "@/types/enums";
 import { CANVAS } from "@/constants/canvas";
 import { ModelRegistry } from "@/helpers/modelRegistry";
 import { useProfile } from "@/hooks/useProfile";
-import { useSettingsStore } from "@/stores/settingsStore";
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
-
+import { LoadingScreen } from "@/components/organisms/LoadingScreen";
 
 const Home = () => {
   const t = useTranslations();
-
-  // Check and load user profile
   const profileId = useProfile();
 
-  // TODO: Check if I only should be watching changes to my profile or all profiles
-  const profiles = useCanvasStore((state) => state.profiles);
-
-  const models = useCanvasStore((state) => state.models);
-
-  // TODO: Check if pulling out an action instead of a value/data is okay and good practice
-  // const setCursorStatus = useCanvasStore.getState().setCursorStatus;
-
-  const [view, setView] = useState<CanvasView>(CanvasView.TopDown);
-
-  // TODO: use usecontext for cursor status, or a global state management solution
-  const [cursorStatus, setCursorStatus] = useState<CursorStatus>(CursorStatus.Default);
+  // TODO: Add dragged object state into profiles in canvas store (zustand)
   const [draggedObject, setDraggedObject] = useState<ObjectProps | null>(null);
 
-  // HACK: Current Easy State Management
+  // Debugging: Log the entire canvas store state on any change
+  // useEffect(() => {
+  //   console.log("Canvas Store State:", useCanvasStore.getState())
+  // }, [useCanvasStore((state) => state)]);
 
-  const [spawnedObjects, setSpawnedObjects] = useState<ObjectProps[]>([]);
+  // States
+  const profiles = useCanvasStore((state) => state.profiles);
+  const objects = useCanvasStore((state) => state.objects);
+
+  // Actions
+  const setCursorStatus = useCanvasStore.getState().setCursorStatus;
+  const addObject = useCanvasStore.getState().addObject;
 
   // Function to add a new object to the canvas
   const handleCursorUp = () => {
     if (draggedObject) {
-      setSpawnedObjects((prev) => [...prev, draggedObject]);
+      addObject(draggedObject);
       setDraggedObject(null);
     }
   }
 
   const toggleView = () => {
-    setView((prev) => (prev === CanvasView.TopDown ? CanvasView.Isometric : CanvasView.TopDown));
+    const setView = useCanvasStore.getState().updateProfile;
+    const newView = profiles[profileId].view === CanvasView.TopDown ? CanvasView.Isometric : CanvasView.TopDown;
+    setView(profileId, { view: newView });
   };
 
   const openSettingsModal = () => {
     const modal = document.getElementById("settings-modal");
     if (modal instanceof HTMLDialogElement) modal.showModal();
 
-    setCursorStatus(CursorStatus.Hidden);
+    setCursorStatus(profileId, CursorStatus.Hidden);
   }
+
+  if (!profiles[profileId]) return <LoadingScreen />;
 
   return (
     <div
-      className={`font-satoshi h-screen flex`}
+      className={`font-erode h-screen flex`}
       onPointerUp={handleCursorUp}
     >
       <input type="checkbox" value={GlobalTheme.Light} className="absolute bottom-16 left-4 toggle theme-controller" />
@@ -80,7 +79,7 @@ const Home = () => {
         className="absolute top-4 right-4 z-50 btn btn-sm"
         onClick={toggleView}
       >
-        {view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
+        {profiles[profileId]?.view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
       </button>
       <button
         className="absolute bottom-4 right-4 z-50 btn btn-sm"
@@ -96,15 +95,15 @@ const Home = () => {
       <TopBar />
 
       <Canvas dpr={[1, 2]} shadows className="h-screen">
-        <Camera view={view} planeY={CANVAS.PLANE} height={CANVAS.CAM_HEIGHT} />
+        <Camera />
 
-        <Ground planeY={CANVAS.PLANE} />
+        <Ground />
 
         {draggedObject && (
           <Ghost obj={draggedObject} setObj={setDraggedObject} planeY={CANVAS.PLANE} />
         )}
 
-        {spawnedObjects.map((obj: ObjectProps, index: number) => {
+        {Object.values(objects).map((obj: ObjectProps, index: number) => {
           const ModelComponent = ModelRegistry[obj.fileName];
           return (
             <Draggable key={index}>
@@ -112,15 +111,15 @@ const Home = () => {
                 position={[obj.position.x, CANVAS.PLANE, obj.position.z]}
                 rotation={[0, (obj.rotation.y * Math.PI) / 180, 0]}
                 scale={obj.scale}
-                onPointerOver={() => setCursorStatus(CursorStatus.Hovered)}
-                onPointerOut={() => setCursorStatus(CursorStatus.Default)}
+                onPointerOver={() => setCursorStatus(profileId, CursorStatus.Hovered)}
+                onPointerOut={() => setCursorStatus(profileId, CursorStatus.Default)}
               />
             </Draggable>
           )
         })}
         <Lighting />
       </Canvas>
-      <Cursor cursorStatus={cursorStatus} />
+      <Cursor />
     </div>
   );
 }

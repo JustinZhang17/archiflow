@@ -1,36 +1,39 @@
 // External Imports 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+// Internal Imports
 import { CanvasState } from "@/types/canvas";
 
-const useCanvasStore = create<CanvasState>()((set) => ({
-  models: {},
+const useCanvasStore = create<CanvasState>()(persist((set) => ({
+  objects: {},
   profiles: {},
 
-  addModel: (model) => {
+  addObject: (object) => {
     set((state) => ({
-      models: {
-        ...state.models,
-        [model.id]: model,
+      objects: {
+        ...state.objects,
+        [object.instanceId]: object,
       }
     }))
   },
 
-  updateModel: (id, updatedProps) => {
+  updateObject: (instanceId, updatedProps) => {
     set((state) => ({
-      models: {
-        ...state.models,
-        [id]: {
-          ...state.models[id], ...updatedProps
+      objects: {
+        ...state.objects,
+        [instanceId]: {
+          ...state.objects[instanceId], ...updatedProps
         }
       }
     }))
   },
 
-  removeModel: (id) => {
+  removeObject: (instanceId) => {
     set((state) => {
-      const newModels = { ...state.models };
-      delete newModels[id];
-      return { models: newModels };
+      const newObjects = { ...state.objects };
+      delete newObjects[instanceId];
+      return { objects: newObjects };
     })
   },
 
@@ -94,6 +97,6 @@ const useCanvasStore = create<CanvasState>()((set) => ({
     }))
   }
 
-}))
+}), { name: "canvas-storage" }));
 
 export { useCanvasStore };

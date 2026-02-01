@@ -1,4 +1,5 @@
 {
+  "appName": "Archiflow",
   "settings": "Settings",
   "canvasView": {
     "isometric": "Toggle Isometric View",
