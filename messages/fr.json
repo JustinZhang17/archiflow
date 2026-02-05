@@ -1,13 +1,23 @@
 {
   "appName": "Archíflow",
-  "settings": "Paramètres",
   "canvasView": {
     "isometric": "Vue isométrique",
     "topDown": "Vue Descendante"
   },
   "language": {
-    "en": "Anglais",
+    "en": "English",
     "fr": "Français"
+  },
+  "settings": {
+    "label": "Paramètres",
+    "theme": {
+      "title": "Thème",
+      "description": "Personnalisez l'apparence de l'application."
+    },
+    "language": {
+      "title": "Langue",
+      "description": "Modifier la langue de l'application."
+    }
   },
   "models": {
     "bowl": {

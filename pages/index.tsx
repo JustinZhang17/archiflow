@@ -1,11 +1,10 @@
 // External Imports
 import { Canvas } from "@react-three/fiber";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { GetStaticPropsContext } from "next";
 import { useTranslations } from 'next-intl';
 
 // Internal Imports
-import LanguagePicker from "@/components/atoms/LanguagePicker/LanguagePicker";
 import Ghost from "@/components/atoms/Ghost/Ghost";
 import Cursor from "@/components/atoms/Cursor/Cursor";
 import Camera from "@/components/organisms/three/Camera";
@@ -18,12 +17,15 @@ import TopBar from "@/components/organisms/Topbar";
 import SettingsModal from "@/components/organisms/SettingsModal";
 
 import { ObjectProps } from "@/types/object";
-import { CanvasView, CursorStatus, GlobalTheme } from "@/types/enums";
+import { CanvasView, CursorStatus } from "@/types/enums";
 import { CANVAS } from "@/constants/canvas";
 import { ModelRegistry } from "@/helpers/modelRegistry";
 import { useProfile } from "@/hooks/useProfile";
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
 import { LoadingScreen } from "@/components/organisms/LoadingScreen";
+
+// Icons
+import { MdSettings } from "react-icons/md";
 
 const Home = () => {
   const t = useTranslations();
@@ -71,10 +73,9 @@ const Home = () => {
 
   return (
     <div
-      className={`font-erode h-screen flex`}
+      className={`font-satoshi h-screen flex`}
       onPointerUp={handleCursorUp}
     >
-      <input type="checkbox" value={GlobalTheme.Light} className="absolute bottom-16 left-4 toggle theme-controller" />
       <button
         className="absolute top-4 right-4 z-50 btn btn-sm"
         onClick={toggleView}
@@ -82,10 +83,11 @@ const Home = () => {
         {profiles[profileId]?.view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
       </button>
       <button
-        className="absolute bottom-4 right-4 z-50 btn btn-sm"
+        className="absolute bottom-4 left-4 z-50 btn btn-sm"
         onClick={openSettingsModal}
       >
-        {t('settings')}
+        <MdSettings size={16} aria-label={t('settings.label')} />
+        <span className="text-xs">{t('settings.label')}</span>
       </button>
       <SettingsModal />
 
@@ -129,6 +131,7 @@ export async function getStaticProps({ locale = 'en' }: GetStaticPropsContext) {
       }
     };
   } catch (error) {
+    console.error(`Error loading messages for locale "${locale}":`, error);
     return {
       props: {
         messages: (await import(`../messages/en.json`)).default

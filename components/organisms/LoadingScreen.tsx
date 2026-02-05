@@ -8,7 +8,7 @@ const BORDER_WIDTH = SIZE / 40;
 
 const LoadingScreen = () => {
   const t = useTranslations();
-  const faceBase = "absolute h-full w-full border-white bg-white/10";
+  const faceBase = "absolute h-full w-full border-neutral bg-neutral/10";
 
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center z-90 gap-6 bg-base-100/80 backdrop-blur-sm">
@@ -39,7 +39,7 @@ const LoadingScreen = () => {
           <div className={faceBase} style={{ transform: `translateZ(-${SIZE / 2}rem)`, borderWidth: `${BORDER_WIDTH}rem` }} />
         </div>
       </div>
-      <div className="text-white text-7xl font-erode">{t('appName')}</div>
+      <div className="text-neutral text-7xl font-erode">{t('appName')}</div>
     </div>
   );
 }

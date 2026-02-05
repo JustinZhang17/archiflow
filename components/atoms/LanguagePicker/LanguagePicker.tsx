@@ -17,6 +17,7 @@ const LanguagePicker = ({ ...props }) => {
     <select
       value={currentLocale}
       onChange={handleChange}
+      className='select select-sm'
       {...props}
     >
       {locales?.map((loc) => (

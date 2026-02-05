@@ -1,13 +1,23 @@
 {
   "appName": "Archiflow",
-  "settings": "Settings",
   "canvasView": {
     "isometric": "Toggle Isometric View",
     "topDown": "Toggle Top-Down View"
   },
   "language": {
     "en": "English",
-    "fr": "French"
+    "fr": "Français"
+  },
+  "settings": {
+    "label": "Settings",
+    "theme": {
+      "title": "Theme",
+      "description": "Customize how you want the application to look."
+    },
+    "language": {
+      "title": "Language",
+      "description": "Change the language of the application."
+    }
   },
   "models": {
     "bowl": {
