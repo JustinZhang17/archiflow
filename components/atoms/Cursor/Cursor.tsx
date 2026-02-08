@@ -8,7 +8,7 @@ import { useCanvasStore } from '@/stores/canvas/canvasStore';
 
 const Cursor = () => {
   const profileId = useProfile();
-  const cursor = useCanvasStore((state) => state.profiles[profileId]?.cursor);
+  const cursor = useCanvasStore((state) => state.profiles[profileId].cursor);
   const setCursorPosition = useCanvasStore.getState().setCursorPosition;
 
   // Define styles for different cursor states
@@ -30,10 +30,10 @@ const Cursor = () => {
     <div
       className={`
         fixed top-0 left-0 rounded-full pointer-events-none z-[999] border-2 
-        ${cursorStyles[cursor?.status || CursorStatus.Default]}
+        ${cursorStyles[cursor.status || CursorStatus.Default]}
       `}
       style={{
-        transform: `translate3d(${cursor?.position.x}px, ${cursor?.position.y}px, 0) translate(-50%, -50%)`,
+        transform: `translate3d(${cursor.position.x}px, ${cursor.position.y}px, 0) translate(-50%, -50%)`,
       }}
     />
   )

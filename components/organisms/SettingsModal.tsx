@@ -12,7 +12,7 @@ import ThemePicker from "@/components/atoms/ThemePicker/ThemePicker";
 
 // TODO: Change to follow good formatting
 const SettingsModal = () => {
-  const t = useTranslations();
+  const t = useTranslations('settings');
   const profileId = useProfile();
   const setCursorStatus = useCanvasStore.getState().setCursorStatus;
 
@@ -26,12 +26,11 @@ const SettingsModal = () => {
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={restoreDefaultCursor}>✕</button>
         </form>
-        {/* TODO: Change to use i18n*/}
-        <SettingTitle>Preferences</SettingTitle>
-        <SettingEntry title={t('settings.language.title')} description={t('settings.language.description')}>
+        <SettingTitle>{t('headings.preferences')}</SettingTitle>
+        <SettingEntry title={t('language.title')} description={t('language.description')}>
           <LanguagePicker />
         </SettingEntry>
-        <SettingEntry title={t('settings.theme.title')} description={t('settings.theme.description')}>
+        <SettingEntry title={t('theme.title')} description={t('theme.description')}>
           <ThemePicker />
         </SettingEntry>
 

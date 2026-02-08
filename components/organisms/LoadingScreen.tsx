@@ -1,7 +1,9 @@
 // External Imports
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { ReactNode, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+
+// Internal Imports
+import { useCanvasStore } from "@/stores/canvas/canvasStore";
 
 const SIZE = 6;
 const BORDER_WIDTH = SIZE / 40;
@@ -44,29 +46,33 @@ const LoadingScreen = () => {
   );
 }
 
-const Loading = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+// TODO: This is a provider, it should not be in components, but I have kept it here for now since I don't know if a provider folder is needed right now, maybe a future thing
+const Loading = ({ children }: { children: ReactNode }) => {
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
-    const handleStart = (url: string) => {
-      if (url !== router.asPath) setIsLoading(true);
+    const unsubscribe = useCanvasStore.persist.onHydrate(() => {
+      setHasHydrated(false);
+    });
+
+    const checkHydration = () => {
+      if (useCanvasStore.persist.hasHydrated()) {
+        setHasHydrated(true);
+      }
     };
 
-    const handleComplete = () => setIsLoading(false);
-
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
+    checkHydration();
+    const timeout = setTimeout(checkHydration, 100);
 
     return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
+      unsubscribe();
+      clearTimeout(timeout);
     };
-  }, [router.asPath, router.events]);
+  }, []);
 
-  return !isLoading ? null : <LoadingScreen />;
+  if (!hasHydrated) return <LoadingScreen />;
+
+  return <>{children}</>;
 };
 
 export { LoadingScreen, Loading };

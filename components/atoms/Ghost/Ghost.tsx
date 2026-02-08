@@ -12,7 +12,7 @@ import { useCanvasStore } from "@/stores/canvas/canvasStore";
 const Ghost = () => {
   const profileId = useProfile();
 
-  const draggedObject = useCanvasStore((state) => state.profiles[profileId]?.draggedObject);
+  const draggedObject = useCanvasStore((state) => state.profiles[profileId].draggedObject);
   const setDraggedObject = useCanvasStore.getState().updateProfile;
 
   const groupRef = useRef<THREE.Group | null>(null);

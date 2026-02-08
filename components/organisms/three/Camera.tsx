@@ -11,7 +11,7 @@ import { CANVAS } from "@/constants/canvas";
 
 const Camera = () => {
   const profileId = useProfile();
-  const view = useCanvasStore((state) => state.profiles[profileId]?.view);
+  const view = useCanvasStore((state) => state.profiles[profileId].view);
 
   const cameraControlsRef = useRef<CameraControls | null>(null);
   const cameraRef = useRef<THREE.OrthographicCamera | null>(null);

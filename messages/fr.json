@@ -10,9 +10,17 @@
   },
   "settings": {
     "label": "Paramètres",
+    "headings": {
+      "preferences": "Préférences"
+    },
     "theme": {
       "title": "Thème",
-      "description": "Personnalisez l'apparence de l'application."
+      "description": "Personnalisez l'apparence de l'application.",
+      "style": {
+        "light": "Léger",
+        "dark": "Sombre",
+        "system": "Système"
+      }
     },
     "language": {
       "title": "Langue",

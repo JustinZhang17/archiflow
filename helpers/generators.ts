@@ -12,4 +12,21 @@ const generateUUID = (): string => {
   });
 };
 
-export { generateUUID };
+// TODO: Improve username generation with more variety
+const generateUsername = (): string => {
+  const adjectives = ['Creative', 'Brilliant', 'Dynamic', 'Innovative', 'Visionary'];
+  const nouns = ['Artist', 'Designer', 'Maker', 'Creator', 'Inventor'];
+
+  const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+
+  return `${randomAdjective}${randomNoun}`;
+}
+
+// TODO: Improve color generation for colors that work well
+const generateColor = (): string => {
+  const hexChars = '0123456789ABCDEF';
+  return '#' + Array.from({ length: 6 }, () => hexChars[Math.floor(Math.random() * hexChars.length)]).join('');
+}
+
+export { generateUUID, generateUsername, generateColor };

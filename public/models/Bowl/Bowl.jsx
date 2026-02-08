@@ -4,13 +4,16 @@ Command: npx gltfjsx@6.5.3 bowl.glb -k --shadows --transform --exportdefault --s
 Files: bowl.glb [1.59MB] > /home/justin/archiflow/public/models/Bowl/bowl-transformed.glb [63.2KB] (96%)
 */
 
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, Outlines } from '@react-three/drei'
 
 export default function Model(props) {
   const { nodes, materials } = useGLTF('/models/Bowl/bowl-transformed.glb')
   return (
     <group {...props} dispose={null}>
-      <mesh name="Bowl" castShadow receiveShadow geometry={nodes.Vert.geometry} material={materials.Color} />
+      <mesh name="Bowl" castShadow receiveShadow geometry={nodes.Vert.geometry} material={materials.Color} >
+        {/* TODO: Have this invert hull outline be dynamic and use it as the focus state */}
+        <Outlines thickness={3} color="black" />
+      </mesh>
     </group>
   )
 }

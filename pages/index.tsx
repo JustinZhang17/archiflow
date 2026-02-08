@@ -10,7 +10,7 @@ import Cursor from "@/components/atoms/Cursor/Cursor";
 import Camera from "@/components/organisms/three/Camera";
 import Ground from "@/components/organisms/three/Ground";
 import Lighting from "@/components/organisms/three/Lighting";
-import Draggable from "@/components/molecules/Draggable";
+import Draggable from "@/components/molecules/Draggable/Draggable";
 import Sidebar from "@/components/organisms/Sidebar";
 import BottomBar from "@/components/organisms/Bottombar";
 import TopBar from "@/components/organisms/Topbar";
@@ -22,7 +22,6 @@ import { CANVAS } from "@/constants/canvas";
 import { ModelRegistry } from "@/helpers/modelRegistry";
 import { useProfile } from "@/hooks/useProfile";
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
-import { LoadingScreen } from "@/components/organisms/LoadingScreen";
 
 // Icons
 import { MdSettings } from "react-icons/md";
@@ -69,8 +68,6 @@ const Home = () => {
     setCursorStatus(profileId, CursorStatus.Hidden);
   }
 
-  if (!profiles[profileId]) return <LoadingScreen />;
-
   return (
     <div
       className={`font-satoshi h-screen flex`}
@@ -80,7 +77,7 @@ const Home = () => {
         className="absolute top-4 right-4 z-50 btn btn-sm"
         onClick={toggleView}
       >
-        {profiles[profileId]?.view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
+        {profiles[profileId].view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
       </button>
       <button
         className="absolute bottom-4 left-4 z-50 btn btn-sm"

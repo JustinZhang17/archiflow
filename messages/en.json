@@ -10,9 +10,17 @@
   },
   "settings": {
     "label": "Settings",
+    "headings": {
+      "preferences": "Preferences"
+    },
     "theme": {
       "title": "Theme",
-      "description": "Customize how you want the application to look."
+      "description": "Customize how you want the application to look.",
+      "style": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+      }
     },
     "language": {
       "title": "Language",

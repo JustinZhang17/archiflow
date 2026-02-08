@@ -40,8 +40,9 @@ const App = ({ Component, pageProps }: AppProps) => {
       messages={pageProps.messages}
     >
       <main className={`${satoshi.variable} ${erode.variable} font-sans`}>
-        <Loading />
-        <Component {...pageProps} />
+        <Loading>
+          <Component {...pageProps} />
+        </Loading>
       </main>
     </NextIntlClientProvider>
   )

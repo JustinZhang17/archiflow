@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@storybook/nextjs-vite": "^10.1.11",
+    "@storybook/nextjs-vite": "^10.2.7",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -33,8 +33,8 @@
     "daisyui": "^5.5.14",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "eslint-plugin-storybook": "^10.1.11",
-    "storybook": "^10.1.11",
+    "eslint-plugin-storybook": "^10.2.7",
+    "storybook": "^10.2.7",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "^7.3.1"
