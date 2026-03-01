@@ -1,12 +1,16 @@
 // External Imports
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState, createContext } from "react";
 import { useTranslations } from "next-intl";
 
 // Internal Imports
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
+import { useProfileStore } from "@/stores/profileStore";
 
 const SIZE = 6;
 const BORDER_WIDTH = SIZE / 40;
+
+// TODO: Check if this is needed
+const LoadingContext = createContext(false);
 
 const LoadingScreen = () => {
   const t = useTranslations();
@@ -48,31 +52,32 @@ const LoadingScreen = () => {
 
 // TODO: This is a provider, it should not be in components, but I have kept it here for now since I don't know if a provider folder is needed right now, maybe a future thing
 const Loading = ({ children }: { children: ReactNode }) => {
-  const [hasHydrated, setHasHydrated] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = useCanvasStore.persist.onHydrate(() => {
-      setHasHydrated(false);
-    });
-
     const checkHydration = () => {
-      if (useCanvasStore.persist.hasHydrated()) {
-        setHasHydrated(true);
+      const canvasHydrate = useCanvasStore.persist?.hasHydrated();
+      const profileHydrate = useProfileStore.persist?.hasHydrated();
+      if (canvasHydrate && profileHydrate) {
+        setIsMounted(true);
       }
-    };
+    }
+
+    const unsubCanvas = useCanvasStore.persist.onFinishHydration(checkHydration);
+    const unsubProfile = useProfileStore.persist.onFinishHydration(checkHydration);
 
     checkHydration();
-    const timeout = setTimeout(checkHydration, 100);
 
     return () => {
-      unsubscribe();
-      clearTimeout(timeout);
-    };
+      unsubCanvas();
+      unsubProfile();
+    }
   }, []);
 
-  if (!hasHydrated) return <LoadingScreen />;
 
-  return <>{children}</>;
+  if (!isMounted) return <LoadingScreen />;
+
+  return <LoadingContext.Provider value={isMounted}>{children}</LoadingContext.Provider>;
 };
 
 export { LoadingScreen, Loading };

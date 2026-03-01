@@ -1,5 +1,9 @@
 {
   "appName": "Archiflow",
+  "meta": {
+    "title": "Archiflow Canvas",
+    "description": "Open Source Architectural diagramming tool with isometrically angled views"
+  },
   "canvasView": {
     "isometric": "Toggle Isometric View",
     "topDown": "Toggle Top-Down View"

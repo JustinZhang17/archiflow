@@ -1,8 +1,10 @@
-import { Html, Head, Main, NextScript } from "next/document";
+// External Imports
+import { Html, Head, Main, NextScript, DocumentProps } from "next/document";
 
-export default function Document() {
+export default function Document(props: DocumentProps) {
+  const { locale } = props.__NEXT_DATA__;
   return (
-    <Html lang="en">
+    <Html lang={locale}>
       <Head />
       <body className="antialiased">
         <Main />

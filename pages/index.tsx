@@ -5,8 +5,9 @@ import { GetStaticPropsContext } from "next";
 import { useTranslations } from 'next-intl';
 
 // Internal Imports
-import Ghost from "@/components/atoms/Ghost/Ghost";
-import Cursor from "@/components/atoms/Cursor/Cursor";
+import { Button } from "@/components/atoms/Button/Button";
+import Ghost from "@/components/global/Ghost/Ghost";
+import Cursor from "@/components/global/Cursor/Cursor";
 import Camera from "@/components/organisms/three/Camera";
 import Ground from "@/components/organisms/three/Ground";
 import Lighting from "@/components/organisms/three/Lighting";
@@ -47,6 +48,9 @@ const Home = () => {
   // NOTE: Multipurpose Update: Using local state for draggedObject
   const updateProfile = useCanvasStore.getState().updateProfile;
 
+  // TODO: Do not use this defensive guard, find something more universal in the loading component
+  // if (!profileId) return "";
+
   // Function to add a new object to the canvas
   const handleCursorUp = () => {
     if (profiles[profileId].draggedObject) {
@@ -73,19 +77,19 @@ const Home = () => {
       className={`font-satoshi h-screen flex`}
       onPointerUp={handleCursorUp}
     >
-      <button
-        className="absolute top-4 right-4 z-50 btn btn-sm"
-        onClick={toggleView}
-      >
-        {profiles[profileId].view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
-      </button>
-      <button
-        className="absolute bottom-4 left-4 z-50 btn btn-sm"
-        onClick={openSettingsModal}
-      >
-        <MdSettings size={16} aria-label={t('settings.label')} />
-        <span className="text-xs">{t('settings.label')}</span>
-      </button>
+      <div className="absolute top-4 right-4 z-50">
+        <Button onClick={toggleView}>
+          {profiles[profileId].view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
+        </Button>
+      </div>
+      <div className="absolute bottom-4 left-4 z-50">
+        <Button
+          onClick={openSettingsModal}
+        >
+          <MdSettings size={16} aria-label={t('settings.label')} />
+          <span className="text-xs">{t('settings.label')}</span>
+        </Button>
+      </div>
       <SettingsModal />
 
       {/* TODO: Convert this to one component, so the tabs can be moved around*/}

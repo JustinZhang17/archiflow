@@ -4,14 +4,14 @@ import { create } from 'storybook/theming/create';
 const theme = create({
   base: 'dark',
   // Typography
-  fontBase: '"Open Sans", sans-serif',
+  fontBase: "Garamond, serif",
   fontCode: 'monospace',
-  brandTitle: 'My custom Storybook',
-  brandUrl: 'https://example.com',
-  brandImage: 'https://storybook.js.org/images/placeholders/350x150.png',
+  brandTitle: 'Archiflow',
+  brandUrl: 'https://archiflow.so',
+  // TODO: Change this to have a brand title
+  brandImage: '/favicon.svg',
   brandTarget: '_self',
-  //
-  // //
+
   // colorPrimary: '#3A10E5',
   // colorSecondary: '#585C6D',
   //

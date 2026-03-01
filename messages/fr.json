@@ -1,5 +1,9 @@
 {
   "appName": "Archíflow",
+  "meta": {
+    "title": "Archíflow Tableau",
+    "description": "Outil de schématisation architecturale open source avec vues isométriques"
+  },
   "canvasView": {
     "isometric": "Vue isométrique",
     "topDown": "Vue Descendante"

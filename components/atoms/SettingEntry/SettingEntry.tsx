@@ -8,7 +8,7 @@ type SettingEntryProps = {
 
 const SettingEntry = ({ children, title, description }: SettingEntryProps) => {
   return (
-    <div className="flex w-full justify-between items-center my-2">
+    <div className="flex w-full justify-between items-center my-2 gap-2">
       <div className="grow-2">
         <h3 className="font-bold text-sm opacity-80">{title}</h3>
         <p className="text-xs opacity-60">{description}</p>
