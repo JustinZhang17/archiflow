@@ -1,13 +1,11 @@
 // External Imports
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 // Internal Imports;
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
 import { useProfileStore } from "@/stores/profileStore";
 import { ProfileProps } from "@/types/profile";
-import { CanvasView, CursorStatus, GlobalTheme } from "@/types/enums";
-import { generateUUID, generateUsername, generateColor } from "@/helpers/generators";
-import { CANVAS } from "@/constants/canvas";
+import { generateProfile } from "@/helpers/generators";
 
 const useProfile = (): ProfileProps["id"] => {
   const profiles = useCanvasStore((state) => state.profiles);
@@ -18,25 +16,7 @@ const useProfile = (): ProfileProps["id"] => {
       useProfileStore.getState().setProfileId(profileId);
     } else {
       // If no profile is found, create a default one
-      const newProfile: ProfileProps = {
-        id: generateUUID(),
-        name: generateUsername(),
-        color: generateColor(),
-        camera: {
-          position: [0, CANVAS.PLANE + CANVAS.CAM_HEIGHT, 0],
-          zoom: 100,
-          rotation: [0, 0, 0],
-        },
-        draggedObject: null,
-        focusedObject: null,
-        view: CanvasView.TopDown,
-        theme: GlobalTheme.Light,
-        cursor: {
-          status: CursorStatus.Default,
-          position: { x: 0, y: 0 }
-        }
-      };
-
+      const newProfile: ProfileProps = generateProfile();
       useProfileStore.getState().setProfileId(newProfile.id);
       useCanvasStore.getState().addProfile(newProfile);
     }

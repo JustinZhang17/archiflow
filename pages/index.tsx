@@ -16,6 +16,7 @@ import Sidebar from "@/components/organisms/Sidebar";
 import BottomBar from "@/components/organisms/Bottombar";
 import TopBar from "@/components/organisms/Topbar";
 import SettingsModal from "@/components/organisms/SettingsModal";
+import NewCanvasModal from "@/components/organisms/NewCanvasModal";
 
 import { ObjectProps } from "@/types/object";
 import { CanvasView, CursorStatus } from "@/types/enums";
@@ -25,7 +26,7 @@ import { useProfile } from "@/hooks/useProfile";
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
 
 // Icons
-import { MdSettings } from "react-icons/md";
+import { MdSettings, MdAdd } from "react-icons/md";
 
 const Home = () => {
   const t = useTranslations();
@@ -48,9 +49,6 @@ const Home = () => {
   // NOTE: Multipurpose Update: Using local state for draggedObject
   const updateProfile = useCanvasStore.getState().updateProfile;
 
-  // TODO: Do not use this defensive guard, find something more universal in the loading component
-  // if (!profileId) return "";
-
   // Function to add a new object to the canvas
   const handleCursorUp = () => {
     if (profiles[profileId].draggedObject) {
@@ -72,25 +70,41 @@ const Home = () => {
     setCursorStatus(profileId, CursorStatus.Hidden);
   }
 
+  const openNewCanvasModal = () => {
+    const modal = document.getElementById("new-canvas-modal");
+    if (modal instanceof HTMLDialogElement) modal.show();
+
+    setCursorStatus(profileId, CursorStatus.Hidden);
+  }
+
   return (
     <div
       className={`font-satoshi h-screen flex`}
       onPointerUp={handleCursorUp}
     >
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute top-4 right-4 z-50 flex flex-col items-end gap-2">
         <Button onClick={toggleView}>
           {profiles[profileId].view === CanvasView.TopDown ? t('canvasView.isometric') : t('canvasView.topDown')}
         </Button>
-      </div>
-      <div className="absolute bottom-4 left-4 z-50">
+
         <Button
           onClick={openSettingsModal}
         >
           <MdSettings size={16} aria-label={t('settings.label')} />
           <span className="text-xs">{t('settings.label')}</span>
         </Button>
+
+        <Button
+          onClick={openNewCanvasModal}
+        >
+          <MdAdd size={16} aria-label={t('actions.newCanvas.label')} />
+          <span className="text-xs">{t('actions.newCanvas.label')}</span>
+        </Button>
       </div>
+
+      {/* Modals */}
       <SettingsModal />
+      <NewCanvasModal />
 
       {/* TODO: Convert this to one component, so the tabs can be moved around*/}
       <Sidebar />

@@ -31,6 +31,14 @@
       "description": "Modifier la langue de l'application."
     }
   },
+  "actions": {
+    "newCanvas": {
+      "label": "Nouvelle Toile",
+      "modal": "Cela effacera votre zone de travail actuelle. Êtes-vous sûr?"
+    },
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
+  },
   "models": {
     "bowl": {
       "name": "Bol",

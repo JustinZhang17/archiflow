@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 // Internal Imports
 import { useCanvasStore } from "@/stores/canvas/canvasStore";
 import { useProfileStore } from "@/stores/profileStore";
+import { generateProfile } from "@/helpers/generators";
+import { ProfileProps } from "@/types/profile";
 
 const SIZE = 6;
 const BORDER_WIDTH = SIZE / 40;
@@ -55,18 +57,32 @@ const Loading = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const checkHydration = () => {
+    const checkHydration = (): boolean => {
       const canvasHydrate = useCanvasStore.persist?.hasHydrated();
       const profileHydrate = useProfileStore.persist?.hasHydrated();
-      if (canvasHydrate && profileHydrate) {
-        setIsMounted(true);
+
+      if (!canvasHydrate || !profileHydrate) return false;
+
+      const profileId = useProfileStore.getState().profileId;
+      const profiles = useCanvasStore.getState().profiles;
+
+      // Create profile if it doesn't exist  
+      if (!profileId || !profiles[profileId]) {
+        const newProfile: ProfileProps = generateProfile();
+        useProfileStore.getState().setProfileId(newProfile.id);
+        useCanvasStore.getState().addProfile(newProfile);
+        return false;
       }
+
+      setIsMounted(true);
+      return true;
     }
 
     const unsubCanvas = useCanvasStore.persist.onFinishHydration(checkHydration);
     const unsubProfile = useProfileStore.persist.onFinishHydration(checkHydration);
 
-    checkHydration();
+    // HACK: Check if this a good way to hydrate
+    while (!checkHydration());
 
     return () => {
       unsubCanvas();

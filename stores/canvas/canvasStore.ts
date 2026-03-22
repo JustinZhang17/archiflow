@@ -37,6 +37,10 @@ const useCanvasStore = create<CanvasState>()(persist((set) => ({
     })
   },
 
+  clearObjects: () => {
+    set({ objects: {} })
+  },
+
   addProfile: (profile) => {
     set((state) => ({
       profiles: {

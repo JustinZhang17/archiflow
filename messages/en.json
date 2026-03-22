@@ -31,6 +31,14 @@
       "description": "Change the language of the application."
     }
   },
+  "actions": {
+    "newCanvas": {
+      "label": "New Canvas",
+      "modal": "This will clear your current canvas. Are you sure?"
+    },
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
   "models": {
     "bowl": {
       "name": "Bowl",

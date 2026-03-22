@@ -14,6 +14,7 @@ type CanvasState = {
   addObject: (object: ObjectProps) => void;
   updateObject: (id: ObjectProps['id'], updatedProps: Partial<ObjectProps>) => void;
   removeObject: (id: ObjectProps['id']) => void;
+  clearObjects: () => void;
 
   addProfile: (profile: ProfileProps) => void;
   updateProfile: (id: ProfileProps['id'], updatedProps: Partial<ProfileProps>) => void;
