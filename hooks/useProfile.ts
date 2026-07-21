@@ -1,8 +1,9 @@
 import { createContext, useContext } from "react";
+import type { ProfileProps } from "@/types/profile";
 
-export const ProfileContext = createContext<string | null>(null);
+export const ProfileContext = createContext<ProfileProps['id'] | null>(null);
 
-export const useProfile = (): string => {
+export const useProfile = (): ProfileProps['id'] => {
   const id = useContext(ProfileContext);
   if (!id) {
     throw new Error(

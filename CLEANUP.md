@@ -54,7 +54,7 @@ These are cleanup, dead code, type issues, and inefficiencies.
 ### M3. Remove unused original GLB from `public/`
 - **File:** `public/models/Bowl/bowl.glb` (~1.59 MB)
 - **Issue:** `Bowl.jsx` loads `bowl-transformed.glb` (63 KB). The original is never referenced but gets served as a static file because it lives in `public/`.
-- **Fix:** Move it out of `public/` (e.g., `raw-models/` at repo root) or delete it if source control is sufficient.
+
 
 ### M4. Remove ~24 unused font files
 - **Files:** All `Erode-*.woff2` except `Erode-Regular.woff2`; all `Satoshi-*.woff2` except `Satoshi-Medium.woff2`.
