@@ -32,12 +32,6 @@ const Home = () => {
   const t = useTranslations();
   const profileId = useProfile();
 
-  // Debugging: Log the entire canvas store state on any change
-  useEffect(() => {
-    console.log("Canvas Store Profile Theme:", useCanvasStore.getState().profiles[profileId]?.theme);
-    console.log("Canvas Store Profile Camera:", useCanvasStore.getState().profiles[profileId]?.camera);
-  }, [useCanvasStore((state) => state.profiles[profileId])]);
-
   // States
   const profiles = useCanvasStore((state) => state.profiles);
   const objects = useCanvasStore((state) => state.objects);
