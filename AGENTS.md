@@ -29,7 +29,7 @@ pnpm build-storybook      # Storybook static build
 - Two Zustand stores with `persist` middleware (localStorage):
   - `stores/canvas/canvasStore.ts` — key `canvas-storage`
   - `stores/profileStore.ts` — key `profile-storage`
-- `hooks/useProfile.ts` auto-creates a default profile if none exists.
+- `hooks/useProfile.ts` reads the active profileId from `ProfileContext` (provided by the `Loading` hydration gate).
 - `hooks/useYjsSync.ts` is an empty placeholder for future real-time collaboration.
 
 ## 3D Model Pipeline
