@@ -12,8 +12,6 @@ import { ProfileContext } from "@/hooks/useProfile";
 const SIZE = 6;
 const BORDER_WIDTH = SIZE / 40;
 
-
-
 const LoadingScreen = () => {
   const t = useTranslations();
   const faceBase = "absolute h-full w-full border-neutral bg-neutral/10";
@@ -64,15 +62,14 @@ const Loading = ({ children }: { children: ReactNode }) => {
 
       if (!canvasHydrate || !profileHydrate) return false;
 
-      const profileId = useProfileStore.getState().profileId;
+      const currentProfileId = useProfileStore.getState().profileId;
       const profiles = useCanvasStore.getState().profiles;
 
-      // Create profile if it doesn't exist  
-      if (!profileId || !profiles[profileId]) {
+      // Create profile if it doesn't exist
+      if (!currentProfileId || !profiles[currentProfileId]) {
         const newProfile: ProfileProps = generateProfile();
         useProfileStore.getState().setProfileId(newProfile.id);
         useCanvasStore.getState().addProfile(newProfile);
-        return false;
       }
 
       setIsMounted(true);
