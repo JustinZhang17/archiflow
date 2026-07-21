@@ -1,5 +1,5 @@
 // External Imports
-import { ReactNode, useEffect, useState, createContext } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 // Internal Imports
@@ -7,12 +7,12 @@ import { useCanvasStore } from "@/stores/canvas/canvasStore";
 import { useProfileStore } from "@/stores/profileStore";
 import { generateProfile } from "@/helpers/generators";
 import { ProfileProps } from "@/types/profile";
+import { ProfileContext } from "@/hooks/useProfile";
 
 const SIZE = 6;
 const BORDER_WIDTH = SIZE / 40;
 
-// TODO: Check if this is needed
-const LoadingContext = createContext(false);
+
 
 const LoadingScreen = () => {
   const t = useTranslations();
@@ -55,6 +55,7 @@ const LoadingScreen = () => {
 // TODO: This is a provider, it should not be in components, but I have kept it here for now since I don't know if a provider folder is needed right now, maybe a future thing
 const Loading = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const profileId = useProfileStore((state) => state.profileId);
 
   useEffect(() => {
     const checkHydration = (): boolean => {
@@ -78,11 +79,11 @@ const Loading = ({ children }: { children: ReactNode }) => {
       return true;
     }
 
+    // Check immediately in case hydration already finished
+    checkHydration();
+
     const unsubCanvas = useCanvasStore.persist.onFinishHydration(checkHydration);
     const unsubProfile = useProfileStore.persist.onFinishHydration(checkHydration);
-
-    // HACK: Check if this a good way to hydrate
-    while (!checkHydration());
 
     return () => {
       unsubCanvas();
@@ -91,9 +92,13 @@ const Loading = ({ children }: { children: ReactNode }) => {
   }, []);
 
 
-  if (!isMounted) return <LoadingScreen />;
+  if (!isMounted || !profileId) return <LoadingScreen />;
 
-  return <LoadingContext.Provider value={isMounted}>{children}</LoadingContext.Provider>;
+  return (
+    <ProfileContext.Provider value={profileId}>
+      {children}
+    </ProfileContext.Provider>
+  );
 };
 
 export { LoadingScreen, Loading };
